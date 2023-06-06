@@ -39,6 +39,10 @@ repeat 'a'
 cycle [1,2,3]
 [1,2,3,1,2,3,1,2,3,1,2,3.....]
 
-git config --global user.name "brian chino"
+
+dwdwdwdwdwddwd12123132
+git config --global user.name "brian chino" 23132123
 git config --global user.email bchinoyanarico@frba.utn.edu.ar
+ 
+
  -}
