@@ -1,0 +1,168 @@
+import enfermedadAutoinmune.*
+import enfermedadInfecciosa.*
+import personas.*
+import medico.*
+import enfermedades.*
+import jefeDeDepartamento.*
+import factoresSanguineos.*
+describe "Dr.Casa - temporada 1" {
+	var malaria
+	var otitis
+	var lupus
+	var otraMalaria
+	var logan
+	var frank
+	method initialize(){
+		malaria = new Infecciosa(celulasAmenazadas = 500)
+		otitis = new Infecciosa(celulasAmenazadas = 100)
+		lupus = new Autoinmune(celulasAmenazadas = 10000)
+		otraMalaria = new Infecciosa(celulasAmenazadas = 800)
+		logan = new Persona(cantidadCelulas = 3000000,temperatura = 36,factorSanguineo = factorR)
+		frank = new Persona(cantidadCelulas = 3500000,temperatura = 36,factorSanguineo = factorR)
+		logan.contraerEnfermedad(lupus)
+		logan.contraerEnfermedad(malaria)
+		logan.contraerEnfermedad(otitis)
+		
+	}
+	test "punto 1 - frank contrae malaria "{
+		frank.contraerEnfermedad(otraMalaria)
+		assert.that(frank.tiene(otraMalaria))
+	}
+	test "punto 2"{
+		malaria.reproducir()
+		assert.equals(1000,malaria.celulasAmenazadas())
+	}
+	test "punto 3a - cantidad de celulas amenazadas de logan por enfermedades agresivas"{
+		logan.vivirUnDia()
+		assert.equals(0,logan.cantidadCelulasAmenazadasPorEnfermedadesAgresivas())
+	}
+	  test "punto 3b - enfermedad que mas celulasAfecten"{
+	
+		logan.vivirUnDia()
+		
+		assert.equals(lupus,logan.enfermedadMasAmenazante())
+	}
+	 
+	test "3c - logan no esta en coma luego de vivir un dia"{
+		logan.vivirUnDia()
+
+		assert.notThat(logan.enComa())
+	}
+	test"4a - logan pasa 31 dias "{
+		logan.vivirDias(31)
+		assert.equals(10000,logan.cantidadCelulasAmenazadasPorEnfermedadesAgresivas())
+	}
+	test" 4b - logan pasa 31 dias "{
+		logan.vivirDias(31)
+		assert.equals(lupus,logan.enfermedadMasAmenazante())
+	}
+	test "4c - logan pasa 31 dias "{
+		logan.vivirDias(31)
+
+		assert.that(logan.enComa())
+	}
+	
+}
+
+describe "Dr.Casa - temporada 2"{
+	var malaria
+	var lupus
+	var otitis
+	var cameron
+	var logan
+	var house
+	method initialize(){
+		malaria = new Infecciosa(celulasAmenazadas = 500)
+		lupus = new Autoinmune(celulasAmenazadas = 10000)
+		otitis = new Infecciosa(celulasAmenazadas = 100)
+		
+	cameron = new Medico(cantidadCelulas = 3000000,temperatura = 36, dosis = 10,factorSanguineo = factorA)
+		logan = new Persona(cantidadCelulas = 3000000,temperatura = 36,factorSanguineo = factorR)
+		house = new JefeDeDepartamento(cantidadCelulas = 3000000,temperatura = 36,factorSanguineo = factorO)
+		
+		logan.contraerEnfermedad(lupus)
+		logan.contraerEnfermedad(malaria)
+		logan.contraerEnfermedad(otitis)
+		house.subordinarA(cameron)
+		
+	}
+	test "punto 1 - la malaria se atenua 100 "{
+		malaria.atenuar(100)
+		assert.equals(400,malaria.celulasAmenazadas())
+	}
+	test "punto 1 - el lupus se atenua 500 "{
+		lupus.atenuar(100)
+		assert.equals(9900,lupus.celulasAmenazadas())
+	}
+	test "cameron atiende a logan y cura de otitis"{
+		cameron.atenderA(logan)
+		
+		assert.notThat(logan.tiene(otitis))
+	}
+	test "cameron atiende a logan y atenua la malaria a 350"{
+		cameron.atenderA(logan)
+		assert.equals(350,malaria.celulasAmenazadas())
+	}
+	test "cameron atiende a logan y atenua el lupus a 9850"{
+		cameron.atenderA(logan)
+		assert.equals(9850,lupus.celulasAmenazadas())
+	}
+	
+	test "punto 3 - house atiende a cameron"{
+		cameron.contraerEnfermedad(lupus)
+		house.atenderA(cameron)
+		assert.equals(9700,lupus.celulasAmenazadas())
+	}
+	
+	test "punto 4 - cameron contrae malaria y se auto-atiende"{
+		cameron.contraerEnfermedad(malaria)
+		assert.equals(350,malaria.celulasAmenazadas())
+	}
+	test "punto 4 house contrae malaria y se auto-atiende"{
+		house.contraerEnfermedad(malaria)
+		assert.equals(350,malaria.celulasAmenazadas())
+	}
+	test "punto 5 house contrae muerte"{
+		house.contraerEnfermedad(muerte)
+		house.vivirUnDia()
+		assert.equals(0,house.temperatura())
+	}
+	
+}
+describe "dr.casa temporada 3"{
+	var malaria
+	var lupus
+	var otitis
+	var cameron
+	var logan
+	var house
+	var foreman
+	
+	method initialize(){
+		malaria = new Infecciosa(celulasAmenazadas = 500)
+		lupus = new Autoinmune(celulasAmenazadas = 10000)
+		otitis = new Infecciosa(celulasAmenazadas = 100)
+		
+		cameron = new Medico(cantidadCelulas = 3000000,temperatura = 36, dosis = 10,factorSanguineo = factorA)
+		logan = new Persona(cantidadCelulas = 3000000,temperatura = 36,factorSanguineo = factorR)
+		house = new JefeDeDepartamento(cantidadCelulas = 3000000,temperatura = 36,factorSanguineo = factorO)
+		foreman = new Medico(cantidadCelulas=3000000,temperatura=36,dosis=10,factorSanguineo=factorA)
+		
+		logan.contraerEnfermedad(lupus)
+		logan.contraerEnfermedad(malaria)
+		logan.contraerEnfermedad(otitis)
+		house.subordinarA(cameron)
+		
+	}
+	
+	test "punto 1 - cameron intenta donar a house 1100 celulas"{
+		
+		assert.throwsExceptionWithMessage("incompatibilidad",{cameron.intentarDonar(house,1100)})
+	}
+	test "punto 2 - logan intentadonar todo lo que puede a Foreman"{
+		assert.doesNotThrowException{cameron.intentarDonar(foreman,750000)}
+	}
+	test "punto 3 - foreman intenta donar a cameron 300 celulas"{
+		assert.throwsExceptionWithMessage("celulasInsuficientes",{foreman.intentarDonar(cameron,300)})
+	}
+}
