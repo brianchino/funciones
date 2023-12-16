@@ -94,5 +94,6 @@ git commit -m "hola"
 git add .
 git pull
 git push
-
+--------------------------------------------------------------------------------
+lazy evaluation
  -}
